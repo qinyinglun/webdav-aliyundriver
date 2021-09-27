@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.zxbu</groupId>
@@ -27,13 +27,11 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>3.14.9</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>2.7.0</version>
         </dependency>
 
 
@@ -56,6 +54,41 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.37.0</version>
+                <configuration>
+                    <!--配置远程docker守护进程url-->
+<!--                    <dockerHost>http://192.168.8.8:2375</dockerHost>-->
+                    <!--认证配置,用于私有registry认证-->
+                    <authConfig>
+                        <username>zx5253</username>
+                        <password>zx5253</password>
+                    </authConfig>
+                    <!--镜像相关配置,支持多镜像-->
+                    <!--                    <registry>docker.io</registry>-->
+                    <name>${project.artifactId}</name>
+                    <images>
+                        <!-- 单个镜像配置 -->
+                        <image>
+                            <!--镜像名(含版本号)  -->
+                            <name>zx5253/${project.artifactId}</name>
+                            <!--registry地址,用于推送,拉取镜像-->
+<!--                            <registry>192.168.8.8</registry>-->
+                            <!--镜像build相关配置-->
+                            <build>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                                <!--使用dockerFile文件-->
+                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
         </plugins>
     </build>
